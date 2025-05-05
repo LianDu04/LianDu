@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIAN DU | 杜礼安</title>
+    <style>
+        /* 基础样式 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ff0000;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 200vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 边框系统 */
+        .border-line {
+            position: fixed;
+            background-color: white;
+            z-index: 100;
+        }
+        .top-line {
+            top: 80px;
+            width: 100%;
+            height: 1px;
+        }
+        .left-line {
+            left: 40px;
+            width: 1px;
+            height: 100%;
+        }
+        .right-line {
+            right: 40px;
+            width: 1px;
+            height: 100%;
+        }
+
+        /* 顶部导航 */
+        .top-nav {
+            position: fixed;
+            top: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            z-index: 101;
+        }
+        .menu-item {
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* 主要内容 */
+        .main-content {
+            position: absolute;
+            top: 120px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .chinese-name {
+            font-family: "Microsoft YaHei", sans-serif;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .name {
+            font-weight: 900;
+            font-size: 30vw;
+            letter-spacing: -2vw;
+            text-transform: uppercase;
+        }
+        .du {
+            margin-top: -5vw;
+        }
+        .lian {
+            margin-top: -10vw;
+        }
+
+        /* 硬币容器 */
+        .coin-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            perspective: 1000px;
+            opacity: 0;
+            transition: opacity 0.8s;
+        }
+
+        .coin {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        /* 硬币正反面 */
+        .coin-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: radial-gradient(circle at 50% 50%, #gold 0%, #daa520 100%);
+            box-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
+        }
+
+        .back {
+            transform: rotateY(180deg);
+            background: radial-gradient(circle at 50% 50%, #silver 0%, #c0c0c0 100%);
+        }
+
+        /* 硬币图案 */
+        .coin-pattern {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background: repeating-linear-gradient(
+                45deg,
+                #000000,
+                #000000 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            opacity: 0.3;
+        }
+
+        .bio-english {
+        position: absolute;
+        top: calc(50% + 150px); /* 在硬币下方150px */
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        width: 80%;
+        max-width: 600px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.5s;
+        z-index: 101;
+    }
+
+    .bio-english h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        letter-spacing: 2px;
+    }
+
+    .bio-english p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .bio-english ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .bio-english li {
+        margin: 10px 0;
+        font-size: 16px;
+    }
+
+    /* 修改硬币容器位置 */
+    .coin-container {
+        top: 45%; /* 为简介留出空间 */
+    }
+        /* 滚动提示 */
+        .scroll-hint {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            letter-spacing: 2px;
+            animation: float 2s infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -10px); }
+        }
+
+        /* 旋转动画 */
+        @keyframes coin-rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(3600deg); } /* 10圈旋转 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 边框线 -->
+    <div class="border-line top-line"></div>
+    <div class="border-line left-line"></div>
+    <div class="border-line right-line"></div>
+
+    <!-- 顶部导航 -->
+    <div class="top-nav">
+        <div class="menu-item">MENU</div>
+        <div class="menu-item">ABOUT</div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="main-content">
+        <div class="chinese-name">杜礼安</div>
+        <div class="name du">DU</div>
+        <div class="name lian">LIAN</div>
+    </div>
+
+    <!-- 硬币容器 -->
+    <div class="coin-container" id="coinContainer">
+        <div class="coin" id="coin">
+            <div class="coin-face front">
+                <div class="coin-pattern"></div>
+                ¥
+            </div>
+            <div class="coin-face back">
+                <div class="coin-pattern"></div>
+                安
+            </div>
+        </div>
+    </div>
+
+    <div class="bio-english">
+        <h3>About Me</h3>
+        <p>I am a Graphic Design student at the University of Illinois, and this website was created during my sophomore year.</p>
+        <ul>
+            <li>Traditional Art: Proficient in sketching, oil painting, watercolor</li>
+            <li>Digital Design: Skilled in AI (Illustrator), ID (InDesign), PS (Photoshop)</li>
+            <li>Presentation Design: Expert in creating visually-focused PowerPoint</li>
+        </ul>
+    </div>
+    
+    <!-- 滚动提示 -->
+    <div class="scroll-hint">SCROLL DOWN</div>
+
+    <script>
+        // 滚动动画控制
+        window.addEventListener('scroll', function() {
+            const scrollY = window.scrollY;
+            const coinContainer = document.getElementById('coinContainer');
+            const coin = document.getElementById('coin');
+
+            // 控制硬币显示
+            if (scrollY > 50) {
+                coinContainer.style.opacity = '1';
+                coin.style.animation = 'coin-rotate 3s linear infinite';
+            } else {
+                coinContainer.style.opacity = '0';
+                coin.style.animation = 'none';
+            }
+
+            // 根据滚动速度调整转速
+            const scrollSpeed = Math.abs(scrollY - lastScrollY);
+            coin.style.animationDuration = `${Math.max(99, 3 - scrollSpeed/999999999)}s`;
+            lastScrollY = scrollY;
+        });
+
+        let lastScrollY = 0;
+
+        window.addEventListener('scroll', function() {
+        // ...原有代码...
+        
+        // 控制简介显示
+        const bioEnglish = document.querySelector('.bio-english');
+        if (scrollY > 300) {
+            bioEnglish.style.opacity = '1';
+        } else {
+            bioEnglish.style.opacity = '0';
+        }
+    });
+        
+    </script>
+
+    
+</body>
+</html>
