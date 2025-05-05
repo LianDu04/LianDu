@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIAN DU 作品集</title>
+    <style>
+        /* 新增滑动画框样式 */
+        .slider-frame {
+            position: relative;
+            margin: 100px var(--border-space) 40px;
+            height: 60vh;
+            border: 1px solid var(--black);
+            overflow: hidden;
+        }
+
+        .slider-container {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            flex: 0 0 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            scroll-snap-align: start;
+        }
+
+        .slide img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        /* 导航按钮 */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 102;
+        }
+
+        .nav-btn {
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+
+        /* 调整原有画廊位置 */
+        .gallery-container {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 在原有代码基础上增加以下内容 -->
+    <div class="slider-frame">
+        <div class="slider-container" id="slider">
+            <!-- 滑动照片 -->
+            <div class="slide">
+                <img src="image-1.jpg" alt="作品1">
+            </div>
+            <div class="slide">
+                <img src="image-2.jpg" alt="作品2">
+            </div>
+            <div class="slide">
+                <img src="image-3.jpg" alt="作品3">
+            </div>
+        </div>
+
+        <!-- 导航按钮 -->
+        <div class="slider-nav">
+            <div class="nav-btn" onclick="prevSlide()">←</div>
+            <div class="nav-btn" onclick="nextSlide()">→</div>
+        </div>
+    </div>
+
+    <script>
+        // 滑动控制逻辑
+        let currentSlide = 0;
+        const slider = document.getElementById('slider');
+        const slides = document.querySelectorAll('.slide');
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlider();
+        }
+
+        // 添加键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'ArrowRight') nextSlide();
+        });
+
+        // 添加触屏滑动
+        let touchStartX = 0;
+        slider.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+        }, false);
+
+        slider.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diffX = touchStartX - touchEndX;
+            
+            if (Math.abs(diffX) > 50) {
+                if (diffX > 0) nextSlide();
+                else prevSlide();
+            }
+        }, false);
+    </script>
+</body>
+</html>
